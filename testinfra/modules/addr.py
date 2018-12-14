@@ -25,12 +25,22 @@ class Addr(Module):
         super(Addr, self).__init__()
 
     def is_reachable(self):
-        result = "command to run"
+        try:
+            self.find_command("nc")
+            has_nc = True
+        except ValueError:
+            has_nc = False
 
         if self.protocol == "tcp":
-            result = self.run_test("echo | nc -vw 1 %s %s", self.address, self.port)
+            if has_nc:
+                result = self.run_test("echo | nc -vw 1 %s %s", self.address, self.port)
+            else:
+                result = self.run_test("timeout 1 bash -c \"< /dev/tcp/%s/%s\"", self.address, self.port)
         elif self.protocol == "udp":
-            result = self.run_test("echo | nc -uvw 1 %s %s", self.address, self.port)
+            if has_nc:
+                result = self.run_test("echo | nc -uvw 1 %s %s", self.address, self.port)
+            else:
+                raise ValueError("can't test udp without netcat")
         else:
             result = self.run_test("ping -w 1 -c 1 %s", self.address)
 
