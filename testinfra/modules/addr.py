@@ -38,7 +38,7 @@ class Addr(Module):
                 result = self.run_test("timeout 1 bash -c \"< /dev/tcp/%s/%s\"", self.address, self.port)
         elif self.protocol == "udp":
             if has_nc:
-                result = self.run_test("timeout 1 bash -c \"< /dev/udp/%s/%s\"", self.address, self.port)
+                result = self.run_test("echo | nc -uvw 1 %s %s", self.address, self.port)
             else:
                 raise ValueError("can't test udp without netcat")
         else:
