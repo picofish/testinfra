@@ -21,6 +21,7 @@ modules = {
     'addr': 'addr:Addr',
     'ansible': 'ansible:Ansible',
     'command': 'command:Command',
+    'docker': 'docker:Docker',
     'file': 'file:File',
     'group': 'group:Group',
     'interface': 'interface:Interface',
